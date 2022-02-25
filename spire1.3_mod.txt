@@ -1,0 +1,175 @@
+diff -rub spire-src-1.3/benchmark/Makefile spire-src-1.3-mod/benchmark/Makefile
+--- spire-src-1.3/benchmark/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/benchmark/Makefile	2022-02-17 23:44:47.000000002 -0500
+@@ -43,8 +43,8 @@
+ 
+ CC            = gcc
+ CXX           = g++
+-CFLAGS        = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+-CXXFLAGS      = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CFLAGS        += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CXXFLAGS      += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+ INCPATH       = -I. -I../prime/stdutil/include -I../spines/libspines/
+ LINK          = g++
+ LFLAGS        = -m64 -Wl,-O1
+@@ -74,7 +74,7 @@
+ all: $(TARGET)
+ 
+ $(TARGET): $(OBJECTS)  
+-	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
++	$(LINK) $(LDFLAGS) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
+ 
+ clean: 
+ 	rm -f $(OBJECTS) 
+diff -rub spire-src-1.3/dnp3/Makefile spire-src-1.3-mod/dnp3/Makefile
+--- spire-src-1.3/dnp3/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/dnp3/Makefile	2022-02-17 23:44:47.000000002 -0500
+@@ -42,13 +42,13 @@
+  #
+ 
+ CC=gcc
+-CFLAGS= -Wall -W -g
++CFLAGS+= -Wall -W -g
+ # NON-STANDARD GCC LOCATION: change CXX to the path to your g++ >= 4.9
+ #CXX=/toolchains/bin/g++
+ CXX=g++   
+ # NON-STANDARD GCC LOCATION: set CXXLIB to set rpath to your libs for g++ >= 4.9
+ #CXXLIB=-Wl,-rpath,/toolchains/lib64
+-CXXFLAGS= -std=gnu++11
++CXXFLAGS+= -std=gnu++11
+ 
+ DNP3_DIR=../OpenPLC_v2/dnp3_build/install
+ LIBS=-lpthread ../prime/OpenTC-1.1/TC-lib-1.0/.libs/libTC.a \
+@@ -72,7 +72,7 @@
+ all: $(TARGET) 
+ 
+ $(TARGET): $(OBJECTS)
+-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS) $(CXXLIB)
++	$(CXX) $(LDFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS) $(CXXLIB)
+ 
+ %.o:	%.cpp
+ 		$(CXX) $(CXXFLAGS) $(INC) -c -o $*.o $*.cpp
+diff -rub spire-src-1.3/hmis/jhu_hmi/Makefile spire-src-1.3-mod/hmis/jhu_hmi/Makefile
+--- spire-src-1.3/hmis/jhu_hmi/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/hmis/jhu_hmi/Makefile	2022-02-17 23:44:48.000000002 -0500
+@@ -43,8 +43,8 @@
+ 
+ CC            = gcc
+ CXX           = g++
+-CFLAGS        = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+-CXXFLAGS      = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CFLAGS        += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CXXFLAGS      += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+ PVB			  = ../../pvb
+ PRIME         = ../../prime
+ SPINES        = ../../spines
+@@ -109,7 +109,7 @@
+ all: $(TARGET)
+ 
+ $(TARGET):  $(OBJECTS)  
+-	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
++	$(LINK) $(LDFLAGS) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+ 
+ clean: 
+ 	rm -rf $(OBJECTS)
+diff -rub spire-src-1.3/modbus/Makefile spire-src-1.3-mod/modbus/Makefile
+--- spire-src-1.3/modbus/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/modbus/Makefile	2022-02-17 23:44:48.000000002 -0500
+@@ -43,8 +43,8 @@
+ 
+ CC            = gcc
+ CXX           = g++
+-CFLAGS        = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+-CXXFLAGS      = -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CFLAGS        += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
++CXXFLAGS      += -m64 -pipe -O2 -Wall -W -fPIE -g $(DEFINES)
+ PVB			  = ../pvb
+ INCPATH       = -I. -I$(PVB)/rllib/lib -I../prime/stdutil/include -I../spines/libspines/
+ LINK          = g++
+@@ -74,7 +74,7 @@
+ all: $(TARGET)
+ 
+ $(TARGET): $(OBJECTS)  
+-	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
++	$(LINK) $(LDFLAGS) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
+ 
+ clean: 
+ 	rm -f $(OBJECTS) 
+diff -rub spire-src-1.3/prime/src/Makefile spire-src-1.3-mod/prime/src/Makefile
+--- spire-src-1.3/prime/src/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/prime/src/Makefile	2022-02-17 23:44:50.000000002 -0500
+@@ -53,7 +53,7 @@
+ 
+ CC = gcc
+ #CFLAGS = -g -pg -O2 -Wall $(SPINES) $(INC)  
+-CFLAGS = -g -O2 -Wall $(SPINES) $(INC)  
++CFLAGS += -g -O2 -Wall $(SPINES) $(INC)  
+ 
+ WRAPPER_OBJ = error_wrapper.o openssl_rsa.o
+ 
+@@ -83,13 +83,13 @@
+ 	cd ../OpenTC-1.1/TC-lib-1.0/; ./configure; make
+ 
+ gen_keys: $(GEN_KEYS_OBJ)
+-	$(CC) $(CFLAGS) -o ../bin/gen_keys $(GEN_KEYS_OBJ) $(LIBSPREAD_UTIL) $(TC_LIB) -lcrypto -ldl -lpthread -lrt
++	$(CC) $(LDFLAGS) -o ../bin/gen_keys $(GEN_KEYS_OBJ) $(LIBSPREAD_UTIL) $(TC_LIB) -lcrypto -ldl -lpthread -lrt
+ 
+ prime: $(PRIME_OBJ)
+-	$(CC) $(CFLAGS) $(CPPFLAGS) -o ../bin/prime $(PRIME_OBJ) $(STDUTIL_LIB) $(LIBSPREAD_UTIL) $(TC_LIB) $(SPINES_LIB) -lm -lcrypto -ldl -lpthread -lrt
++	$(CC) $(LDFLAGS) $(CPPFLAGS) -o ../bin/prime $(PRIME_OBJ) $(STDUTIL_LIB) $(LIBSPREAD_UTIL) $(TC_LIB) $(SPINES_LIB) -lm -lcrypto -ldl -lpthread -lrt
+ 
+ client: $(CLIENT_OBJ)
+-	$(CC) -o ../bin/client $(CLIENT_OBJ) $(STDUTIL_LIB) $(LIBSPREAD_UTIL) $(TC_LIB) $(SPINES_LIB) -lm -lcrypto -ldl -lpthread -lrt
++	$(CC) $(LDFLAGS) -o ../bin/client $(CLIENT_OBJ) $(STDUTIL_LIB) $(LIBSPREAD_UTIL) $(TC_LIB) $(SPINES_LIB) -lm -lcrypto -ldl -lpthread -lrt
+ 
+ %.o:	%.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $*.o $*.c
+diff -rub spire-src-1.3/proxy/Makefile spire-src-1.3-mod/proxy/Makefile
+--- spire-src-1.3/proxy/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/proxy/Makefile	2022-02-17 23:44:51.000000002 -0500
+@@ -42,7 +42,7 @@
+  #
+ 
+ CC=gcc
+-CFLAGS= -Wall -W -g
++CFLAGS+= -Wall -W -g
+ TARGET=proxy
+ LIBS=-lpthread ../prime/OpenTC-1.1/TC-lib-1.0/.libs/libTC.a \
+            ../spines/libspines/libspines.a ../prime/stdutil/lib/libstdutil.a \
+@@ -61,7 +61,7 @@
+ all: $(TARGET) 
+ 
+ $(TARGET): $(OBJECTS)
+-	$(CC) -o $(TARGET) $(OBJECTS) $(LIBS)
++	$(CC) $(LDFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS)
+ 
+ clean:
+ 	rm -f $(OBJECTS)
+diff -rub spire-src-1.3/scada_master/Makefile spire-src-1.3-mod/scada_master/Makefile
+--- spire-src-1.3/scada_master/Makefile	2020-12-23 10:26:03.000000002 -0500
++++ spire-src-1.3-mod/scada_master/Makefile	2022-02-17 23:45:23.000000002 -0500
+@@ -42,7 +42,7 @@
+  #
+ 
+ CC=gcc
+-CFLAGS= -Wall -W -g
++CFLAGS+= -Wall -W -g
+ TARGET=scada_master gen_keys
+ INC= -I ../prime/stdutil/include -I ../spines/libspines -I ../common
+ 
+@@ -73,13 +73,13 @@
+ 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(INC) -o scada_master.o scada_master.c 
+ 
+ scada_master: $(SM_OBJ)
+-		$(CC) -o scada_master $(SM_OBJ) $(TC_LIB) $(LIBSPREAD_UTIL) $(SPINES_LIB) -lpthread -ldl -lcrypto -lm -lrt
++		$(CC) $(LDFLAGS) -o scada_master $(SM_OBJ) $(TC_LIB) $(LIBSPREAD_UTIL) $(SPINES_LIB) -lpthread -ldl -lcrypto -lm -lrt
+ 
+ generate_keys.o: generate_keys.c ../common/itrc.h ../common/tc_wrapper.h
+ 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(INC) -o generate_keys.o generate_keys.c
+ 
+ gen_keys: $(GEN_KEYS_OBJ)
+-	$(CC) $(CFLAGS) -o gen_keys $(GEN_KEYS_OBJ) $(LIBSPREAD_UTIL) $(TC_LIB) -lcrypto -ldl -lpthread -lrt
++	$(CC) $(LDFLAGS) -o gen_keys $(GEN_KEYS_OBJ) $(LIBSPREAD_UTIL) $(TC_LIB) -lcrypto -ldl -lpthread -lrt
+ 
+ %.o:	%.c
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(INC) -c -o $*.o $*.c
